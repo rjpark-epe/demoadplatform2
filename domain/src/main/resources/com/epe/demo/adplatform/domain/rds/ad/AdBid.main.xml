@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdBidRepository">
+	<resultMap id='AdBidMap' type='com.epe.demo.adplatform.domain.rds.ad.AdBidVo'>
+	  <id property='adId' column='AD_ID' />
+	  <result property='bidCost' column='BID_COST' />
+	  <result property='bidTime' column='BID_TIME' />
+	  <association property="metadata" resultMap="Common.MetadataMap" />
+	</resultMap>
+	
+	<sql id="select">
+		SELECT AB.AD_ID, AB.BID_COST, AB.BID_TIME, AB.UPDATE_TIME, AB.UPDATE_ID, AB.UPDATE_IP, AB.UPDATE_INSTANCE, AB.UPDATE_MENU_ID 
+		FROM AD_BID AB 
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.ad.AdBidVo">
+		INSERT INTO AD_BID (AD_ID, BID_COST, BID_TIME, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID) 
+		VALUES (#{adId},#{bidCost},#{bidTime},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertHis" parameterType="com.epe.demo.adplatform.domain.rds.ad.AdBidVo">
+		INSERT INTO AD_BID_HIS (HIS_ID, AD_ID, BID_COST, BID_TIME, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV) 
+		VALUES (#{metadata.hisId},#{adId},#{bidCost},#{bidTime},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv})
+	</insert>
+		
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.ad.AdBidVo">
+		UPDATE AD_BID SET BID_COST = #{bidCost}, BID_TIME = #{bidTime}, UPDATE_TIME = #{metadata.updateTime}, UPDATE_ID = #{metadata.updateId}, UPDATE_IP = #{metadata.updateIp}, UPDATE_INSTANCE = #{metadata.updateInstance}, UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR} 
+		WHERE AD_ID = #{adId}
+	</update>
+	
+	<select id="findAll" resultMap="AdBidMap" fetchSize="1000">
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="AdBidMap">
+		<include refid="select"/>
+		WHERE AD_ID = #{adId}
+	</select>
+
+	<select id="findOneRandom" resultMap="AdBidMap">
+		SELECT AB.AD_ID, AB.BID_COST, AB.BID_TIME, AB.UPDATE_TIME, AB.UPDATE_ID, AB.UPDATE_IP, AB.UPDATE_INSTANCE, AB.UPDATE_MENU_ID
+		FROM (
+		<include refid="select"/>
+		LIMIT 0, 10000
+		) AB
+		ORDER BY rand()
+		LIMIT 0, 1
+	</select>
+
+</mapper>

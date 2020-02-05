@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdvConfigRepository">
+
+	<resultMap id='AdvConfigMap' type='com.epe.demo.adplatform.domain.rds.adv.AdvConfigVo'>
+	  <id property='advId' column='ADV_ID' />
+	  <result property='joinTime' column='JOIN_TIME' />
+	  <result property='clauseAgreeYn' column='CLAUSE_AGREE_YN' />
+	  <result property='clauseAgreeTime' column='CLAUSE_AGREE_TIME' />
+	  <result property='advPericName' column='ADV_PERIC_NAME' />
+	  <result property='advPericEmail' column='ADV_PERIC_EMAIL' />
+	  <result property='advPericHp' column='ADV_PERIC_HP' />
+	  <result property='balanceStatusAlertYn' column='BALANCE_STATUS_ALERT_YN' />
+	  <result property='promAlertYn' column='PROM_ALERT_YN' />
+	  <result property='nightSmsAlertYn' column='NIGHT_SMS_ALERT_YN' />
+	  <result property='manualCnrAdvYn' column='MANUAL_CNR_ADV_YN' />
+  	  <result property='hopeAdvConfigDtime' column='HOPE_ADV_CONFIG_DTIME' />
+  	  <result property='hopeAdvConfigYn' column='HOPE_ADV_CONFIG_YN' />
+  	  <result property='hopeAdvConfigProcYn' column='HOPE_ADV_CONFIG_PROC_YN' />
+  	  <result property='agroupLimitCnt' column='AGROUP_LIMIT_CNT' />
+  	  <result property='itemSyncYn' column='ITEM_SYNC_YN' />
+  	  <result property='firstImpDate' column='FIRST_IMP_DATE' />
+  	  <result property='recentImpDate' column='RECENT_IMP_DATE' />
+  	  
+  	  <result property='comName' column='COM_NAME' />
+	  <association property="metadata" resultMap="Common.MetadataMap" />
+	</resultMap>
+	
+	<sql id="select">
+		SELECT AC.ADV_ID, AC.JOIN_TIME, AC.CLAUSE_AGREE_YN, AC.CLAUSE_AGREE_TIME, AC.ADV_PERIC_NAME, AC.ADV_PERIC_EMAIL, AC.ADV_PERIC_HP, AC.BALANCE_STATUS_ALERT_YN, AC.PROM_ALERT_YN, AC.NIGHT_SMS_ALERT_YN, AC.MANUAL_CNR_ADV_YN, AC.HOPE_ADV_CONFIG_DTIME, AC.HOPE_ADV_CONFIG_YN, AC.HOPE_ADV_CONFIG_PROC_YN, AC.AGROUP_LIMIT_CNT, AC.UPDATE_TIME, AC.UPDATE_ID, AC.UPDATE_IP, AC.UPDATE_INSTANCE, AC.UPDATE_MENU_ID, AC.ITEM_SYNC_YN, AC.FIRST_IMP_DATE, AC.RECENT_IMP_DATE 
+		FROM ADV_CONFIG AC 
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.adv.AdvConfigVo">
+		INSERT INTO ADV_CONFIG (ADV_ID, JOIN_TIME, CLAUSE_AGREE_YN, CLAUSE_AGREE_TIME, ADV_PERIC_NAME, ADV_PERIC_EMAIL, ADV_PERIC_HP, BALANCE_STATUS_ALERT_YN, PROM_ALERT_YN, NIGHT_SMS_ALERT_YN, MANUAL_CNR_ADV_YN, HOPE_ADV_CONFIG_DTIME, HOPE_ADV_CONFIG_YN, HOPE_ADV_CONFIG_PROC_YN, AGROUP_LIMIT_CNT, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, ITEM_SYNC_YN, FIRST_IMP_DATE, RECENT_IMP_DATE) 
+		VALUES (#{advId},#{joinTime,jdbcType=TIMESTAMP},#{clauseAgreeYn},#{clauseAgreeTime},#{advPericName},#{advPericEmail},#{advPericHp},#{balanceStatusAlertYn},#{promAlertYn},#{nightSmsAlertYn},#{manualCnrAdvYn},#{hopeAdvConfigDtime,jdbcType=TIMESTAMP},#{hopeAdvConfigYn,jdbcType=NUMERIC},#{hopeAdvConfigProcYn,jdbcType=NUMERIC},#{agroupLimitCnt},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{itemSyncYn},#{firstImpDate,jdbcType=VARCHAR},#{recentImpDate,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertHis" parameterType="com.epe.demo.adplatform.domain.rds.adv.AdvConfigVo">
+		INSERT INTO ADV_CONFIG_HIS (HIS_ID, ADV_ID, JOIN_TIME, CLAUSE_AGREE_YN, CLAUSE_AGREE_TIME, ADV_PERIC_NAME, ADV_PERIC_EMAIL, ADV_PERIC_HP, BALANCE_STATUS_ALERT_YN, PROM_ALERT_YN, NIGHT_SMS_ALERT_YN, MANUAL_CNR_ADV_YN, HOPE_ADV_CONFIG_DTIME, HOPE_ADV_CONFIG_YN, HOPE_ADV_CONFIG_PROC_YN, AGROUP_LIMIT_CNT, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV, ITEM_SYNC_YN, FIRST_IMP_DATE, RECENT_IMP_DATE) 
+		VALUES (#{metadata.hisId},#{advId},#{joinTime,jdbcType=TIMESTAMP},#{clauseAgreeYn},#{clauseAgreeTime},#{advPericName},#{advPericEmail},#{advPericHp},#{balanceStatusAlertYn},#{promAlertYn},#{nightSmsAlertYn},#{manualCnrAdvYn},#{hopeAdvConfigDtime,jdbcType=TIMESTAMP},#{hopeAdvConfigYn,jdbcType=NUMERIC},#{hopeAdvConfigProcYn,jdbcType=NUMERIC},#{agroupLimitCnt},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv},#{itemSyncYn},#{firstImpDate,jdbcType=VARCHAR},#{recentImpDate,jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.adv.AdvConfigVo">
+		UPDATE ADV_CONFIG SET JOIN_TIME = #{joinTime,jdbcType=TIMESTAMP}, CLAUSE_AGREE_YN = #{clauseAgreeYn}, CLAUSE_AGREE_TIME = #{clauseAgreeTime}, ADV_PERIC_NAME = #{advPericName}, ADV_PERIC_EMAIL = #{advPericEmail}, ADV_PERIC_HP = #{advPericHp}, BALANCE_STATUS_ALERT_YN = #{balanceStatusAlertYn}, PROM_ALERT_YN = #{promAlertYn}, NIGHT_SMS_ALERT_YN = #{nightSmsAlertYn}, MANUAL_CNR_ADV_YN = #{manualCnrAdvYn}, HOPE_ADV_CONFIG_DTIME = #{hopeAdvConfigDtime,jdbcType=TIMESTAMP}, HOPE_ADV_CONFIG_YN = #{hopeAdvConfigYn,jdbcType=NUMERIC}, HOPE_ADV_CONFIG_PROC_YN = #{hopeAdvConfigProcYn,jdbcType=NUMERIC}, AGROUP_LIMIT_CNT = #{agroupLimitCnt}, UPDATE_TIME = #{metadata.updateTime}, UPDATE_ID = #{metadata.updateId}, UPDATE_IP = #{metadata.updateIp}, UPDATE_INSTANCE = #{metadata.updateInstance}, UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR}, ITEM_SYNC_YN = #{itemSyncYn}, FIRST_IMP_DATE = #{firstImpDate,jdbcType=VARCHAR}, RECENT_IMP_DATE = #{recentImpDate,jdbcType=VARCHAR} 
+		WHERE ADV_ID = #{advId}
+	</update>
+	
+	<select id="findAll" resultMap="AdvConfigMap" fetchSize="1000" resultOrdered="true" >
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="AdvConfigMap">
+		<include refid="select"/>
+		WHERE ADV_ID = #{advId}
+	</select>
+	
+	<!-- 사용자 정의 -->
+</mapper>

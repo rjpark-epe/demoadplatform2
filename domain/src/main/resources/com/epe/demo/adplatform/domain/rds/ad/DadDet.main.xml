@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DadDetRepository">
+	<resultMap id='DadDetMap' type='com.epe.demo.adplatform.domain.rds.ad.DadDetVo'>
+	  <id property='dadDetId' column='DAD_DET_ID' />
+	  <result property='adId' column='AD_ID' />
+	  <result property='kwdId' column='KWD_ID' />
+	  <result property='dadCnrStatus' column='DAD_CNR_STATUS' />
+	  <result property='cnrReqId' column='CNR_REQ_ID' />
+	  <result property='dadUseConfigYn' column='DAD_USE_CONFIG_YN' />
+	  <result property='dadActYn' column='DAD_ACT_YN' />
+	  <result property='regTime' column='REG_TIME' />
+	  		  	  
+	  <association property="metadata" resultMap="Common.MetadataMap" />
+	  <association property="ad" resultMap="AdRepository.AdMap" columnPrefix="A_"/>
+	  <association property="dadDetBid" resultMap="DadDetBidRepository.DadDetBidMap" columnPrefix="DDB_"/>
+	  <association property="kwd" resultMap="KwdRepository.KwdMap" columnPrefix="K_"/>
+	</resultMap>
+
+	<sql id="select">
+		SELECT DD.DAD_DET_ID, DD.AD_ID, DD.KWD_ID, DD.DAD_CNR_STATUS, DD.CNR_REQ_ID, DD.DAD_USE_CONFIG_YN, DD.DAD_ACT_YN, DD.UPDATE_TIME, DD.UPDATE_ID, DD.UPDATE_IP, DD.UPDATE_INSTANCE, DD.UPDATE_MENU_ID, DD.REG_TIME 
+		FROM DAD_DET DD  
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.ad.DadDetVo">
+		INSERT INTO DAD_DET (DAD_DET_ID, AD_ID, KWD_ID, DAD_CNR_STATUS, CNR_REQ_ID, DAD_USE_CONFIG_YN, DAD_ACT_YN, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, REG_TIME) 
+		VALUES (#{dadDetId},#{adId},#{kwdId},#{dadCnrStatus},#{cnrReqId},#{dadUseConfigYn},#{dadActYn},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{regTime})
+	</insert>
+	
+	<insert id="insertHis" parameterType="com.epe.demo.adplatform.domain.rds.ad.DadDetVo">
+		INSERT INTO DAD_DET_HIS (HIS_ID, DAD_DET_ID, AD_ID, KWD_ID, DAD_CNR_STATUS, CNR_REQ_ID, DAD_USE_CONFIG_YN, DAD_ACT_YN, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV, REG_TIME) 
+		VALUES (#{metadata.hisId},#{dadDetId},#{adId},#{kwdId},#{dadCnrStatus},#{cnrReqId},#{dadUseConfigYn},#{dadActYn},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv},#{regTime})
+	</insert>	
+	
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.ad.DadDetVo">
+		UPDATE DAD_DET SET AD_ID = #{adId}, KWD_ID = #{kwdId}, DAD_CNR_STATUS = #{dadCnrStatus}, CNR_REQ_ID = #{cnrReqId}, DAD_USE_CONFIG_YN = #{dadUseConfigYn}, DAD_ACT_YN = #{dadActYn}, UPDATE_TIME = #{metadata.updateTime}, UPDATE_ID = #{metadata.updateId}, UPDATE_IP = #{metadata.updateIp}, UPDATE_INSTANCE = #{metadata.updateInstance}, UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR} 
+		WHERE DAD_DET_ID = #{dadDetId}
+	</update>
+	
+	<select id="findAll" resultMap="DadDetMap" fetchSize="1000">
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="DadDetMap">
+  		<include refid='select' />
+  		WHERE DAD_DET_ID = #{dadDetId}
+	</select>
+
+	<select id="findOneWithAdAndKwd" resultMap="DadDetMap">
+		SELECT A.AD_ID AS A_AD_ID, A.AGROUP_ID AS A_AGROUP_ID, A.ADV_ID AS A_ADV_ID, A.ITEM_ID AS A_ITEM_ID, A.AD_USE_CONFIG_YN AS A_AD_USE_CONFIG_YN, A.AD_ACT_YN AS A_AD_ACT_YN,
+				DDB.BID_COST AS DDB_BID_COST, DDB.BID_TIME AS DDB_BID_TIME, DD.DAD_DET_ID, DD.AD_ID, DD.KWD_ID, DD.DAD_CNR_STATUS, DD.DAD_USE_CONFIG_YN, DD.DAD_ACT_YN,
+				K.KWD_NAME AS K_KWD_NAME, K.KWD_ID AS K_KWD_ID
+		FROM AD A
+		JOIN DAD_DET DD ON A.AD_ID = DD.AD_ID
+		JOIN DAD_DET_BID DDB ON DD.DAD_DET_ID = DDB.DAD_DET_ID
+		JOIN KWD K ON DD.KWD_ID = K.KWD_ID
+		WHERE DD.DAD_DET_ID = #{adDetId}
+	</select>
+
+	<select id="findAllWithAdAndKwd" resultMap="DadDetMap" fetchSize="1000" resultOrdered="true">
+		SELECT A.AD_ID AS A_AD_ID, A.AGROUP_ID AS A_AGROUP_ID, A.ADV_ID AS A_ADV_ID, A.ITEM_ID AS A_ITEM_ID, A.AD_USE_CONFIG_YN AS A_AD_USE_CONFIG_YN, A.AD_ACT_YN AS A_AD_ACT_YN,
+				DDB.BID_COST AS DDB_BID_COST, DDB.BID_TIME AS DDB_BID_TIME, DD.DAD_DET_ID, DD.AD_ID, DD.KWD_ID, DD.DAD_CNR_STATUS, DD.DAD_USE_CONFIG_YN, DD.DAD_ACT_YN,
+				K.KWD_NAME AS K_KWD_NAME, K.KWD_ID AS K_KWD_ID
+		FROM AD A
+		JOIN DAD_DET DD ON A.AD_ID = DD.AD_ID
+		JOIN DAD_DET_BID DDB ON DD.DAD_DET_ID = DDB.DAD_DET_ID
+		JOIN KWD K ON DD.KWD_ID = K.KWD_ID
+	</select>
+
+	<sql id="findPageWithAdAndKwd">
+		SELECT A.AD_ID AS A_AD_ID, A.AGROUP_ID AS A_AGROUP_ID, A.ADV_ID AS A_ADV_ID, A.ITEM_ID AS A_ITEM_ID, A.AD_USE_CONFIG_YN AS A_AD_USE_CONFIG_YN, A.AD_ACT_YN AS A_AD_ACT_YN,
+				DDB.BID_COST AS DDB_BID_COST, DDB.BID_TIME AS DDB_BID_TIME, DD.DAD_DET_ID, DD.AD_ID, DD.KWD_ID, DD.DAD_CNR_STATUS, DD.DAD_USE_CONFIG_YN, DD.DAD_ACT_YN,
+				K.KWD_NAME AS K_KWD_NAME, K.KWD_ID AS K_KWD_ID
+		FROM AD A
+		JOIN DAD_DET DD ON A.AD_ID = DD.AD_ID
+		JOIN DAD_DET_BID DDB ON DD.DAD_DET_ID = DDB.DAD_DET_ID
+		JOIN KWD K ON DD.KWD_ID = K.KWD_ID
+		ORDER BY A.AD_ID
+	</sql>
+
+	<select id="findPageWithAdAndKwd_pageList" resultMap="DadDetMap">
+		<include refid="Common.start"/>
+		<include refid="findPageWithAdAndKwd"/>
+		<include refid="Common.end"/>
+	</select>
+
+	<select id="findPageWithAdAndKwd_pageCount" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="findPageWithAdAndKwd"/>
+		) C
+	</select>
+
+	<select id="findListByAdId" resultMap="DadDetMap">
+		<include refid="select" />
+		WHERE AD_ID = #{adId}
+	</select>
+
+	<select id="findOneRandom" resultMap="DadDetMap">
+		SELECT DD.DAD_DET_ID, DD.AD_ID, DD.KWD_ID, DD.DAD_CNR_STATUS, DD.CNR_REQ_ID, DD.DAD_USE_CONFIG_YN, DD.DAD_ACT_YN, DD.UPDATE_TIME, DD.UPDATE_ID, DD.UPDATE_IP, DD.UPDATE_INSTANCE, DD.UPDATE_MENU_ID, DD.REG_TIME
+		FROM (
+		<include refid="select"/>
+		LIMIT 0, 10000
+		) DD
+		ORDER BY rand()
+		LIMIT 0, 1
+	</select>
+
+</mapper>

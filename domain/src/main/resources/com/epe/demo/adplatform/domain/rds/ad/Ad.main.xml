@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdRepository">
+	<resultMap id='AdMap' type='com.epe.demo.adplatform.domain.rds.ad.AdVo'>
+	  <id property='adId' column='AD_ID' />
+	  <result property='agroupId' column='AGROUP_ID' />
+	  <result property='advId' column='ADV_ID' />
+	  <result property='itemId' column='ITEM_ID' />
+	  <result property='srpQs' column='SRP_QS' />
+	  <result property='nsrpQs' column='NSRP_QS' />
+	  <result property='adUseConfigYn' column='AD_USE_CONFIG_YN' />
+	  <result property='adActYn' column='AD_ACT_YN' />	  
+	  <result property='kwdName' column='KWD_NAME' />
+	  <result property='bidCost' column='BID_COST' />
+	  <result property='dadUseConfigYn' column='dadUseConfigYn' />
+	  <result property='itemName' column='ITEM_NAME' />
+	  <result property='dadUseConfigYn' column='DAD_USE_CONFIG_YN' />
+  	  <result property='regTime' column='REG_TIME' />
+  	  
+  	  <!-- AI+수동등록에서 사용 -->
+	</resultMap>
+
+		
+	<sql id='select'>
+		SELECT A.AD_ID, A.AGROUP_ID, A.ADV_ID, A.ITEM_ID, A.SRP_QS, A.NSRP_QS, A.AD_USE_CONFIG_YN, A.AD_ACT_YN, A.UPDATE_TIME, A.UPDATE_ID, A.UPDATE_IP, A.UPDATE_INSTANCE, A.UPDATE_MENU_ID, A.REG_TIME 
+		FROM AD A 
+	</sql>
+	
+	<insert id='insert' parameterType='com.epe.demo.adplatform.domain.rds.ad.AdVo'>
+		INSERT INTO AD (AD_ID, AGROUP_ID, ADV_ID, ITEM_ID, SRP_QS, NSRP_QS, AD_USE_CONFIG_YN, AD_ACT_YN, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, REG_TIME) 
+		VALUES (#{adId},#{agroupId},#{advId},#{itemId},#{srpQs},#{nsrpQs},#{adUseConfigYn},#{adActYn},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{regTime})
+	</insert>
+	
+	<insert id='insertHis' parameterType='com.epe.demo.adplatform.domain.rds.ad.AdVo'>
+		INSERT INTO AD_HIS (HIS_ID, AD_ID, AGROUP_ID, ADV_ID, ITEM_ID, SRP_QS, NSRP_QS, AD_USE_CONFIG_YN, AD_ACT_YN, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV, REG_TIME) 
+		VALUES (#{metadata.hisId},#{adId},#{agroupId},#{advId},#{itemId},#{srpQs},#{nsrpQs},#{adUseConfigYn},#{adActYn},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv},#{regTime,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<update id='update' parameterType='com.epe.demo.adplatform.domain.rds.ad.AdVo'>
+		UPDATE AD SET AGROUP_ID = #{agroupId}, ADV_ID = #{advId}, ITEM_ID = #{itemId}, SRP_QS = #{srpQs}, NSRP_QS = #{nsrpQs}, AD_USE_CONFIG_YN = #{adUseConfigYn}, AD_ACT_YN = #{adActYn}, UPDATE_TIME = #{metadata.updateTime}, UPDATE_ID = #{metadata.updateId}, UPDATE_IP = #{metadata.updateIp}, UPDATE_INSTANCE = #{metadata.updateInstance}, UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR} 
+		WHERE AD_ID = #{adId}
+	</update>
+	
+	<select id="findAll" resultMap="AdMap" fetchSize="1000">
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="AdMap">
+		<include refid="select"/>
+		WHERE AD_ID = #{adId}
+	</select>
+
+	<select id="findOneRandom" resultMap="AdMap">
+		SELECT A.AD_ID, A.AGROUP_ID, A.ADV_ID, A.ITEM_ID, A.SRP_QS, A.NSRP_QS, A.AD_USE_CONFIG_YN, A.AD_ACT_YN, A.UPDATE_TIME, A.UPDATE_ID, A.UPDATE_IP, A.UPDATE_INSTANCE, A.UPDATE_MENU_ID, A.REG_TIME
+		FROM (
+			<include refid="select"/>
+			LIMIT 0, 10000
+		) A
+		ORDER BY rand()
+		LIMIT 0, 1
+	</select>
+
+</mapper>

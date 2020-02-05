@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AgroupRepository">
+	<resultMap id='AgroupMap' type='com.epe.demo.adplatform.domain.rds.agroup.AgroupVo'>
+		<id property='agroupId' column='AGROUP_ID' />
+		<result property='agroupName' column='AGROUP_NAME' />
+		<result property='advId' column='ADV_ID' />
+		<result property='agroupBudgetLimitCost' column='AGROUP_BUDGET_LIMIT_COST' />
+		<result property='agroupBudgetPossYn' column='AGROUP_BUDGET_POSS_YN' />
+		<result property='agroupUseConfigYn' column='AGROUP_USE_CONFIG_YN' />
+		<result property='agroupImpStrgDow' column='AGROUP_IMP_STRG_DOW' />
+		<result property='agroupImpStrgStartDate' column='AGROUP_IMP_STRG_START_DATE' />
+		<result property='agroupImpStrgEndDate' column='AGROUP_IMP_STRG_END_DATE' />
+		<result property='hopeAgroupConfigDtime' column='HOPE_AGROUP_CONFIG_DTIME' />
+		<result property='hopeAgroupConfigYn' column='HOPE_AGROUP_CONFIG_YN' />
+		<result property='hopeAgroupConfigProcYn' column='HOPE_AGROUP_CONFIG_PROC_YN' />
+		<result property='agroupActYn' column='AGROUP_ACT_YN' />
+	  	<result property='regTime' column='REG_TIME' />
+	  	
+		<association property="metadata" resultMap="Common.MetadataMap" />
+	</resultMap>
+	<sql id="select">
+		SELECT A.AGROUP_ID, A.AGROUP_NAME, A.ADV_ID, A.AGROUP_BUDGET_LIMIT_COST, A.AGROUP_BUDGET_POSS_YN, A.AGROUP_USE_CONFIG_YN, A.AGROUP_IMP_STRG_DOW, A.AGROUP_IMP_STRG_START_DATE, A.AGROUP_IMP_STRG_END_DATE, A.HOPE_AGROUP_CONFIG_DTIME, A.HOPE_AGROUP_CONFIG_YN, A.HOPE_AGROUP_CONFIG_PROC_YN, A.AGROUP_ACT_YN, A.REG_TIME, A.UPDATE_TIME, A.UPDATE_ID, A.UPDATE_IP, A.UPDATE_INSTANCE, A.UPDATE_MENU_ID 
+		FROM AGROUP A 
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.agroup.AgroupVo">
+		INSERT INTO AGROUP (AGROUP_ID, AGROUP_NAME, ADV_ID, AGROUP_BUDGET_LIMIT_COST, AGROUP_BUDGET_POSS_YN, AGROUP_USE_CONFIG_YN, AGROUP_IMP_STRG_DOW, AGROUP_IMP_STRG_START_DATE, AGROUP_IMP_STRG_END_DATE, HOPE_AGROUP_CONFIG_DTIME, HOPE_AGROUP_CONFIG_YN, HOPE_AGROUP_CONFIG_PROC_YN, AGROUP_ACT_YN, REG_TIME, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID) 
+		VALUES (#{agroupId},#{agroupName},#{advId},#{agroupBudgetLimitCost},#{agroupBudgetPossYn},#{agroupUseConfigYn},#{agroupImpStrgDow},#{agroupImpStrgStartDate,jdbcType=VARCHAR},#{agroupImpStrgEndDate,jdbcType=VARCHAR},#{hopeAgroupConfigDtime,jdbcType=TIMESTAMP},#{hopeAgroupConfigYn,jdbcType=NUMERIC},#{hopeAgroupConfigProcYn},#{agroupActYn},#{regTime},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertHis" parameterType="com.epe.demo.adplatform.domain.rds.agroup.AgroupVo">
+		INSERT INTO AGROUP_HIS (HIS_ID, AGROUP_ID, AGROUP_NAME, ADV_ID, AGROUP_BUDGET_LIMIT_COST, AGROUP_BUDGET_POSS_YN, AGROUP_USE_CONFIG_YN, AGROUP_IMP_STRG_DOW, AGROUP_IMP_STRG_START_DATE, AGROUP_IMP_STRG_END_DATE, HOPE_AGROUP_CONFIG_DTIME, HOPE_AGROUP_CONFIG_YN, HOPE_AGROUP_CONFIG_PROC_YN, AGROUP_ACT_YN, REG_TIME, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV) 
+		VALUES (#{metadata.hisId},#{agroupId},#{agroupName},#{advId},#{agroupBudgetLimitCost},#{agroupBudgetPossYn},#{agroupUseConfigYn},#{agroupImpStrgDow},#{agroupImpStrgStartDate,jdbcType=VARCHAR},#{agroupImpStrgEndDate,jdbcType=VARCHAR},#{hopeAgroupConfigDtime,jdbcType=TIMESTAMP},#{hopeAgroupConfigYn,jdbcType=NUMERIC},#{hopeAgroupConfigProcYn},#{agroupActYn}, #{regTime},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv})
+	</insert>
+	
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.agroup.AgroupVo">
+		UPDATE AGROUP SET AGROUP_NAME = #{agroupName}, ADV_ID = #{advId}, AGROUP_BUDGET_LIMIT_COST = #{agroupBudgetLimitCost}, AGROUP_BUDGET_POSS_YN = #{agroupBudgetPossYn}, AGROUP_USE_CONFIG_YN = #{agroupUseConfigYn}, AGROUP_IMP_STRG_DOW = #{agroupImpStrgDow}, AGROUP_IMP_STRG_START_DATE = #{agroupImpStrgStartDate,jdbcType=VARCHAR}, AGROUP_IMP_STRG_END_DATE = #{agroupImpStrgEndDate,jdbcType=VARCHAR}, HOPE_AGROUP_CONFIG_DTIME = #{hopeAgroupConfigDtime,jdbcType=TIMESTAMP}, HOPE_AGROUP_CONFIG_YN = #{hopeAgroupConfigYn,jdbcType=NUMERIC}, HOPE_AGROUP_CONFIG_PROC_YN = #{hopeAgroupConfigProcYn}, AGROUP_ACT_YN = #{agroupActYn}, REG_TIME=#{regTime}, UPDATE_TIME = #{metadata.updateTime}, UPDATE_ID = #{metadata.updateId}, UPDATE_IP = #{metadata.updateIp}, UPDATE_INSTANCE = #{metadata.updateInstance}, UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR} 
+		WHERE AGROUP_ID = #{agroupId}
+	</update>
+	
+	<select id="findAll" resultMap="AgroupMap" fetchSize="1000"  resultOrdered="true">
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="AgroupMap">
+		<include refid="select"/>
+		WHERE AGROUP_ID = #{agroupId}
+	</select>
+	
+	<!-- 사용자 정의 -->
+	<select id="findOneRandom" resultMap="AgroupMap">
+		<include refid="select" />
+		ORDER BY rand()
+		LIMIT 0, 1
+	</select>
+</mapper>

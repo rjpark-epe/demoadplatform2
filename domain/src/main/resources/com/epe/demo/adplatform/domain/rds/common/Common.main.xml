@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Common">
+
+	<sql id="start"></sql>
+	
+	<sql id="end">
+	   <if test="pageable != null">
+        LIMIT #{pageable.offset}, #{pageable.pageSize}
+		</if> 
+	</sql>
+	
+	
+	<!-- 정렬 -->
+	<sql id="order">
+		<if test="pageable != null and pageable.sort != null">
+			ORDER BY <foreach collection="pageable.sort" item="order"   separator=","> ${order.property} ${order.direction} </foreach>
+		</if> 
+	</sql>
+	
+	<!-- UPDATE_TIME 을 이용한 기간비교  -->
+	<sql id="betweenUpdateTime">
+		<if test="updateTime != null" > 
+			<if test="updateTime.start != null" > <![CDATA[ AND UPDATE_TIME >= #{updateTime.start} ]]>   </if>
+			<if test="updateTime.end != null" >   <![CDATA[ AND UPDATE_TIME <  #{updateTime.end} ]]>     </if>	  
+		</if>
+	</sql>	
+	
+	<!-- REG_TIME 을 이용한 기간비교  -->
+	<sql id="betweenRegTime">
+		<if test="regTime != null" > 
+			<if test="regTime.start != null" > <![CDATA[ AND REG_TIME >= #{regTime.start} ]]>   </if>
+			<if test="regTime.end != null" >   <![CDATA[ AND REG_TIME <  #{regTime.end} ]]>     </if>	  
+		</if>
+	</sql>
+	
+	<resultMap id='MetadataMap' type='com.epe.demo.adplatform.domain.rds.common.Metadata'>
+		<result property='updateTime' column='UPDATE_TIME' />
+		<result property='updateId' column='UPDATE_ID' />
+		<result property='updateIp' column='UPDATE_IP' />
+		<!-- 이력 컬럼(HIS_ID는 PK라서 여기 없다) -->
+		<result property='hisDiv' column='HIS_DIV' />
+	</resultMap>
+	
+</mapper>

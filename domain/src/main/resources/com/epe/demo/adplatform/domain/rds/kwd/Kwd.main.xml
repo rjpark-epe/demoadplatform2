@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="KwdRepository">
+
+	<resultMap id='KwdMap' type='com.epe.demo.adplatform.domain.rds.kwd.KwdVo'>
+	  <id property='kwdId' column='KWD_ID' />
+	  <result property='kwdName' column='KWD_NAME' />
+	  <result property='indexPrior' column='INDEX_PRIOR' />
+	  <result property='sellPossKwdYn' column='SELL_POSS_KWD_YN' />
+	  <result property='manualCnrKwdYn' column='MANUAL_CNR_KWD_YN' />
+	  <association property="metadata" resultMap="Common.MetadataMap" />
+	</resultMap>
+	
+	<sql id="select">
+		SELECT K.KWD_ID, K.KWD_NAME, K.INDEX_PRIOR, K.SELL_POSS_KWD_YN, K.MANUAL_CNR_KWD_YN, K.UPDATE_TIME, K.UPDATE_ID, K.UPDATE_IP, K.UPDATE_INSTANCE, K.UPDATE_MENU_ID 
+		FROM KWD K 
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.kwd.KwdVo">
+		INSERT INTO KWD (KWD_ID, KWD_NAME, INDEX_PRIOR, SELL_POSS_KWD_YN, MANUAL_CNR_KWD_YN, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID) 
+		VALUES (#{kwdId},#{kwdName},#{indexPrior},#{sellPossKwdYn},#{manualCnrKwdYn},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertHis" parameterType="com.epe.demo.adplatform.domain.rds.kwd.KwdVo">
+		INSERT INTO KWD_HIS (HIS_ID, KWD_ID, KWD_NAME, INDEX_PRIOR, SELL_POSS_KWD_YN, MANUAL_CNR_KWD_YN, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV) 
+		VALUES (#{metadata.hisId},#{kwdId},#{kwdName},#{indexPrior},#{sellPossKwdYn},#{manualCnrKwdYn},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv})
+	</insert>
+	
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.kwd.KwdVo">
+		UPDATE KWD SET KWD_NAME = #{kwdName}, INDEX_PRIOR = #{indexPrior}, SELL_POSS_KWD_YN = #{sellPossKwdYn}, MANUAL_CNR_KWD_YN = #{manualCnrKwdYn}, UPDATE_TIME = #{metadata.updateTime}, UPDATE_ID = #{metadata.updateId}, UPDATE_IP = #{metadata.updateIp}, UPDATE_INSTANCE = #{metadata.updateInstance}, UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR} 
+		WHERE KWD_ID = #{kwdId}
+	</update>
+	
+	<select id="findAll" resultMap="KwdMap" fetchSize="1000" resultOrdered="true">
+		<include refid="select"/>
+	</select>
+	<select id="findListByIdsUseMultiKey" resultMap="KwdMap" fetchSize="1000">
+		<include refid="select"/>
+		WHERE KWD_ID IN <foreach collection="ids" item="item" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+	
+	<select id="findOne" resultMap="KwdMap">
+		<include refid="select"/>
+		WHERE KWD_ID = #{kwdId}
+	</select>
+
+
+	<select id="findListByIndexPrior" resultMap="KwdMap">
+		<include refid="select" />
+		WHERE INDEX_PRIOR = #{indexPrior}
+	</select>
+	
+	<!-- 사용자 정의 -->
+
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AadDetRepository">
+	<resultMap id='AadDetMap' type='com.epe.demo.adplatform.domain.rds.ad.AadDetVo'>
+		<id property='aadDetId' column='AAD_DET_ID' />
+ 		<result property='adId' column='AD_ID' />
+ 		<result property='kwdId' column='KWD_ID' />
+		<result property='matchType' column='MATCH_TYPE' />
+		<result property='highRelKwdYn' column='HIGH_REL_KWD_YN' />
+
+		<association property="ad" resultMap="AdRepository.AdMap" columnPrefix="A_"/>
+		<association property="adBid" resultMap="AdBidRepository.AdBidMap" columnPrefix="AB_"/>
+		<association property="kwd" resultMap="KwdRepository.KwdMap" columnPrefix="K_"/>
+	</resultMap>
+
+	<sql id="select">
+		SELECT AD.AAD_DET_ID, AD.AD_ID, AD.KWD_ID, AD.MATCH_TYPE, AD.HIGH_REL_KWD_YN 
+		FROM AAD_DET AD 
+	</sql>
+
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.ad.AadDetVo">
+		INSERT INTO AAD_DET (AAD_DET_ID, AD_ID, KWD_ID, MATCH_TYPE, HIGH_REL_KWD_YN) 
+		VALUES (#{aadDetId},#{adId},#{kwdId},#{matchType},#{highRelKwdYn})
+	</insert>
+
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.ad.AadDetVo">
+		UPDATE AAD_DET SET AD_ID = #{adId}, KWD_ID = #{kwdId}, MATCH_TYPE = #{matchType}, HIGH_REL_KWD_YN = #{highRelKwdYn}
+		WHERE AAD_DET_ID = #{aadDetId}
+	</update>
+	
+	<delete id="delete" parameterType="com.epe.demo.adplatform.domain.rds.ad.AadDetVo">
+		DELETE FROM AAD_DET WHERE AAD_DET_ID = #{aadDetId}
+	</delete>
+	
+	<select id="findAll" resultMap="AadDetMap" fetchSize="1000">
+		<include refid="select" />
+	</select>
+
+	<select id="findOne" resultMap="AadDetMap">
+		<include refid="select" />
+		WHERE AAD_DET_ID = #{aadDetId}
+	</select>
+
+	<select id="findListByAdId" resultMap="AadDetMap">
+		<include refid="select" />
+		WHERE AD_ID = #{adId}
+	</select>
+	
+	<select id="findListByKwdId" resultMap="AadDetMap">
+		<include refid="select" /> 
+		WHERE KWD_ID IN
+		<foreach collection="kwdIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="findIdsByKwdId" resultType="long" parameterType="list">
+		SELECT AD.AAD_DET_ID
+		FROM AAD_DET AD 
+		WHERE AD.KWD_ID IN
+		<foreach collection="kwdIds" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findByAdIdAndKwdId" resultMap="AadDetMap">
+		<include refid="select" />
+		WHERE AD_ID = #{adId}
+		AND KWD_ID = #{kwdId}
+	</select>
+
+	<select id="findOneWithAdAndKwd" resultMap="AadDetMap">
+		SELECT A.AD_ID AS A_AD_ID, A.AGROUP_ID AS A_AGROUP_ID, A.ADV_ID AS A_ADV_ID, A.ITEM_ID AS A_ITEM_ID, A.AD_USE_CONFIG_YN AS A_AD_USE_CONFIG_YN, A.AD_ACT_YN AS A_AD_ACT_YN,
+				AB.BID_COST AS AB_BID_COST, AB.BID_TIME AS AB_BID_TIME,
+				AD.AAD_DET_ID, AD.AD_ID, AD.KWD_ID,
+				K.KWD_ID AS K_KWD_ID, K.KWD_NAME AS K_KWD_NAME
+		FROM AD A
+		JOIN AD_BID AB ON A.AD_ID = AB.AD_ID
+		JOIN AAD_DET AD ON A.AD_ID = AD.AD_ID
+		JOIN KWD K ON AD.KWD_ID = K.KWD_ID
+		WHERE AD.AAD_DET_ID = #{adDetId}
+	</select>
+
+	<select id="findAllWithAdAndKwd" resultMap="AadDetMap" fetchSize="1000" resultOrdered="true">
+		SELECT A.AD_ID AS A_AD_ID, A.AGROUP_ID AS A_AGROUP_ID, A.ADV_ID AS A_ADV_ID, A.ITEM_ID AS A_ITEM_ID, A.AD_USE_CONFIG_YN AS A_AD_USE_CONFIG_YN, A.AD_ACT_YN AS A_AD_ACT_YN,
+				AB.BID_COST AS AB_BID_COST, AB.BID_TIME AS AB_BID_TIME,
+				AD.AAD_DET_ID, AD.AD_ID, AD.KWD_ID,
+				K.KWD_ID AS K_KWD_ID, K.KWD_NAME AS K_KWD_NAME
+		FROM AD A
+		JOIN AD_BID AB ON A.AD_ID = AB.AD_ID
+		JOIN AAD_DET AD ON A.AD_ID = AD.AD_ID
+		JOIN KWD K ON AD.KWD_ID = K.KWD_ID
+	</select>
+
+	<sql id="findPageWithAdAndKwd">
+		SELECT A.AD_ID AS A_AD_ID, A.AGROUP_ID AS A_AGROUP_ID, A.ADV_ID AS A_ADV_ID, A.ITEM_ID AS A_ITEM_ID, A.AD_USE_CONFIG_YN AS A_AD_USE_CONFIG_YN, A.AD_ACT_YN AS A_AD_ACT_YN,
+				AB.BID_COST AS AB_BID_COST, AB.BID_TIME AS AB_BID_TIME,
+				AD.AAD_DET_ID, AD.AD_ID, AD.KWD_ID,
+				K.KWD_ID AS K_KWD_ID, K.KWD_NAME AS K_KWD_NAME
+		FROM AD A
+		JOIN AD_BID AB ON A.AD_ID = AB.AD_ID
+		JOIN AAD_DET AD ON A.AD_ID = AD.AD_ID
+		JOIN KWD K ON AD.KWD_ID = K.KWD_ID
+		ORDER BY A.AD_ID
+	</sql>
+
+	<select id="findPageWithAdAndKwd_pageList" resultMap="AadDetMap">
+		<include refid="Common.start"/>
+		<include refid="findPageWithAdAndKwd"/>
+		<include refid="Common.end"/>
+	</select>
+
+	<select id="findPageWithAdAndKwd_pageCount" resultType="long">
+		SELECT COUNT(*) FROM (
+		<include refid="findPageWithAdAndKwd"/>
+		) C
+	</select>
+
+	<select id="findListWithKwdByAdId" resultMap="AadDetMap">
+		SELECT AD.AAD_DET_ID, AD.AD_ID, AD.KWD_ID, AD.MATCH_TYPE, AD.HIGH_REL_KWD_YN, K.KWD_ID AS K_KWD_ID, K.KWD_NAME AS K_KWD_NAME
+		FROM AAD_DET AD
+		JOIN KWD K ON A.KWD_ID = K.KWD_ID
+	</select>
+
+</mapper>

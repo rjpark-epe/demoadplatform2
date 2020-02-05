@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">  
+    
+<configuration>
+     
+	<settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    	<setting name="autoMappingBehavior" value="FULL"/>
+    	<!-- 이 설정으로 batch 처리가 가능하다. -->
+        <setting name="defaultExecutorType" value="BATCH" />
+        <!-- map으로 받을때 NULL인 value도 key가 생성된다. -->
+        <setting name="callSettersOnNulls" value="true"/>
+        <!-- http://stackoverflow.com/questions/18427682/error-setting-null-for-parameter-with-mybatis-and-ojdbc14-jar -->
+        <setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+
+    <typeHandlers>
+        <typeHandler handler="com.epe.demo.adplatform.adservice.config.DateTimeTypeHandler" javaType="org.joda.time.DateTime" />
+    </typeHandlers>
+
+</configuration>

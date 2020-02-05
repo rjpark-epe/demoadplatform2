@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdvRepository">
+
+	<resultMap id='AdvMap' type='com.epe.demo.adplatform.domain.rds.adv.AdvVo'>
+	  <id property='advId' column='ADV_ID' />
+	  <result property='advComId' column='ADV_COM_ID' />
+	  <result property='ipkComNo' column='IPK_COM_NO' />
+	  <result property='supContractSeq' column='SUP_CONTRACT_SEQ' />
+	  <result property='comName' column='COM_NAME' />
+	  <result property='comStatus' column='COM_STATUS' />
+	  
+	  <result property='comDiv' column='COM_DIV' />
+	  <result property='advUseConfigYn' column='ADV_USE_CONFIG_YN' />
+	  <result property='advRegStatus' column='ADV_REG_STATUS' />
+	  <result property='advBudgetLimitCost' column='ADV_BUDGET_LIMIT_COST' />
+	  <result property='advBudgetPossYn' column='ADV_BUDGET_POSS_YN' />
+	  <result property='advBalancePossYn' column='ADV_BALANCE_POSS_YN' />
+	  <result property='advDcRate' column='ADV_DC_RATE' />
+	  <result property='advDcStartDate' column='ADV_DC_START_DATE' />
+	  <result property='advDcEndDate' column='ADV_DC_END_DATE' />
+	  <result property='advDcComt' column='ADV_DC_COMT' />
+	  <result property='advImpStrgDow' column='ADV_IMP_STRG_DOW' />
+  	  <result property='advImpStrgStartDate' column='ADV_IMP_STRG_START_DATE' />
+      <result property='advImpStrgEndDate' column='ADV_IMP_STRG_END_DATE' />
+	  <result property='comno' column='COMNO' />
+	  <result property='srStatus' column='SR_STATUS' />
+	  <result property='srConfigDate' column='SR_CONFIG_DATE' />
+	  <result property='agencyRecReqId' column='AGENCY_REC_REQ_ID' />
+	  <result property='recentThirtiethExhaustCost' column='RECENT_THIRTIETH_EXHAUST_COST' />
+	  
+	  <result property='impCnt' column='IMP_CNT' />
+	  <result property='dpaAdspend' column='DPA_ADSPEND' />
+	  <result property='acppAdspend' column='ACPP_ADSPEND' />
+	  
+	  <association property="metadata" resultMap="Common.MetadataMap" />
+	  <association property="advConfig" columnPrefix="AC1_" resultMap="AdvConfigRepository.AdvConfigMap" />
+	</resultMap>
+	
+	<sql id="select">
+		SELECT A.ADV_ID, A.ADV_COM_ID, A.IPK_COM_NO, A.SUP_CONTRACT_SEQ, A.COM_NAME, A.COM_STATUS, A.COM_DIV, A.ADV_USE_CONFIG_YN, A.ADV_REG_STATUS, A.ADV_BUDGET_LIMIT_COST, A.ADV_BUDGET_POSS_YN, A.ADV_BALANCE_POSS_YN, A.ADV_DC_RATE, A.ADV_DC_START_DATE, A.ADV_DC_END_DATE, A.ADV_DC_COMT, A.ADV_IMP_STRG_DOW, A.ADV_IMP_STRG_START_DATE, A.ADV_IMP_STRG_END_DATE, A.UPDATE_TIME, A.UPDATE_ID, A.UPDATE_IP, A.UPDATE_INSTANCE, A.UPDATE_MENU_ID, A.AGENCY_REC_REQ_ID
+		FROM ADV A  
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.adv.AdvVo">
+		INSERT INTO ADV (ADV_ID, ADV_COM_ID, IPK_COM_NO, SUP_CONTRACT_SEQ, COM_NAME, COM_STATUS, COM_DIV, ADV_USE_CONFIG_YN, ADV_REG_STATUS, ADV_BUDGET_LIMIT_COST, ADV_BUDGET_POSS_YN, ADV_BALANCE_POSS_YN, ADV_DC_RATE, ADV_DC_START_DATE, ADV_DC_END_DATE, ADV_DC_COMT, ADV_IMP_STRG_DOW, ADV_IMP_STRG_START_DATE, ADV_IMP_STRG_END_DATE, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, AGENCY_REC_REQ_ID)
+		VALUES (#{advId},#{advComId},#{ipkComNo},#{supContractSeq},#{comName,jdbcType=VARCHAR},#{comStatus,jdbcType=VARCHAR},#{comDiv,jdbcType=VARCHAR},#{advUseConfigYn},#{advRegStatus},#{advBudgetLimitCost},#{advBudgetPossYn},#{advBalancePossYn},#{advDcRate},#{advDcStartDate,jdbcType=VARCHAR},#{advDcEndDate,jdbcType=VARCHAR},#{advDcComt,jdbcType=VARCHAR},#{advImpStrgDow,jdbcType=VARCHAR},#{advImpStrgStartDate,jdbcType=VARCHAR},#{advImpStrgEndDate,jdbcType=VARCHAR},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{agencyRecReqId,jdbcType=NUMERIC})
+	</insert>
+	
+	<insert id="insertHis" parameterType="com.epe.demo.adplatform.domain.rds.adv.AdvVo">
+		INSERT INTO ADV_HIS (HIS_ID, ADV_ID, ADV_COM_ID, IPK_COM_NO, SUP_CONTRACT_SEQ, COM_NAME, COM_STATUS, COM_DIV, ADV_USE_CONFIG_YN, ADV_REG_STATUS, ADV_BUDGET_LIMIT_COST, ADV_BUDGET_POSS_YN, ADV_BALANCE_POSS_YN, ADV_DC_RATE, ADV_DC_START_DATE, ADV_DC_END_DATE, ADV_DC_COMT, ADV_IMP_STRG_DOW, ADV_IMP_STRG_START_DATE, ADV_IMP_STRG_END_DATE, UPDATE_TIME, UPDATE_ID, UPDATE_IP, UPDATE_INSTANCE, UPDATE_MENU_ID, HIS_DIV, AGENCY_REC_REQ_ID)
+		VALUES (#{metadata.hisId},#{advId},#{advComId},#{ipkComNo},#{supContractSeq},#{comName,jdbcType=VARCHAR},#{comStatus,jdbcType=VARCHAR},#{comDiv,jdbcType=VARCHAR},#{advUseConfigYn},#{advRegStatus},#{advBudgetLimitCost},#{advBudgetPossYn},#{advBalancePossYn},#{advDcRate},#{advDcStartDate,jdbcType=VARCHAR},#{advDcEndDate,jdbcType=VARCHAR},#{advDcComt,jdbcType=VARCHAR},#{advImpStrgDow,jdbcType=VARCHAR},#{advImpStrgStartDate,jdbcType=VARCHAR},#{advImpStrgEndDate,jdbcType=VARCHAR},#{metadata.updateTime},#{metadata.updateId},#{metadata.updateIp},#{metadata.updateInstance},#{metadata.updateMenuId,jdbcType=VARCHAR},#{metadata.hisDiv},#{agencyRecReqId,jdbcType=NUMERIC})
+	</insert>
+	
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.adv.AdvVo">
+		UPDATE ADV SET ADV_COM_ID = #{advComId},
+						IPK_COM_NO = #{ipkComNo},
+						SUP_CONTRACT_SEQ = #{supContractSeq},
+						COM_NAME = #{comName,jdbcType=VARCHAR},
+						COM_STATUS = #{comStatus,jdbcType=VARCHAR},
+						COM_DIV = #{comDiv,jdbcType=VARCHAR},
+						ADV_USE_CONFIG_YN = #{advUseConfigYn},
+						ADV_REG_STATUS = #{advRegStatus},
+						ADV_BUDGET_LIMIT_COST = #{advBudgetLimitCost},
+						ADV_BUDGET_POSS_YN = #{advBudgetPossYn},
+						ADV_BALANCE_POSS_YN = #{advBalancePossYn},
+						ADV_DC_RATE = #{advDcRate},
+						ADV_DC_START_DATE = #{advDcStartDate,jdbcType=VARCHAR},
+						ADV_DC_END_DATE = #{advDcEndDate,jdbcType=VARCHAR},
+						ADV_DC_COMT = #{advDcComt,jdbcType=VARCHAR},
+						ADV_IMP_STRG_DOW = #{advImpStrgDow,jdbcType=VARCHAR},
+						ADV_IMP_STRG_START_DATE = #{advImpStrgStartDate,jdbcType=VARCHAR},
+						ADV_IMP_STRG_END_DATE = #{advImpStrgEndDate,jdbcType=VARCHAR},
+						UPDATE_TIME = #{metadata.updateTime},
+						UPDATE_ID = #{metadata.updateId},
+						UPDATE_IP = #{metadata.updateIp},
+						UPDATE_INSTANCE = #{metadata.updateInstance},
+						UPDATE_MENU_ID = #{metadata.updateMenuId,jdbcType=VARCHAR},
+						AGENCY_REC_REQ_ID = #{agencyRecReqId,jdbcType=NUMERIC}
+		WHERE ADV_ID = #{advId}
+	</update>
+	
+	<select id="findAll" resultMap="AdvMap" fetchSize="1000" >
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="AdvMap">
+		<include refid='select' />
+  		WHERE ADV_ID = #{advId}
+	</select>
+	
+	<!-- 사용자 정의 -->
+	<select id="findAllWithConfig" resultMap="AdvMap" fetchSize="1000" resultOrdered="true">
+		SELECT A.ADV_ID, A.ADV_COM_ID, A.IPK_COM_NO, A.SUP_CONTRACT_SEQ, A.COM_NAME, A.COM_STATUS, A.COM_DIV, A.ADV_USE_CONFIG_YN, A.ADV_REG_STATUS, A.ADV_BUDGET_LIMIT_COST, A.ADV_BUDGET_POSS_YN, A.ADV_BALANCE_POSS_YN, A.ADV_DC_RATE,
+				A.ADV_DC_START_DATE, A.ADV_DC_END_DATE, A.ADV_DC_COMT, A.ADV_IMP_STRG_DOW, A.ADV_IMP_STRG_START_DATE, A.ADV_IMP_STRG_END_DATE, A.UPDATE_TIME, A.UPDATE_ID, A.UPDATE_IP, A.UPDATE_INSTANCE, A.UPDATE_MENU_ID, A.AGENCY_REC_REQ_ID,
+				AC.ADV_ID AS AC1_ADV_ID, AC.JOIN_TIME AS AC1_JOIN_TIME, AC.CLAUSE_AGREE_YN AS AC1_CLAUSE_AGREE_YN, AC.CLAUSE_AGREE_TIME AS AC1_CLAUSE_AGREE_TIME, AC.ADV_PERIC_NAME AS AC1_ADV_PERIC_NAME, AC.ADV_PERIC_EMAIL AS AC1_ADV_PERIC_EMAIL,
+				AC.ADV_PERIC_HP AS AC1_ADV_PERIC_HP, AC.BALANCE_STATUS_ALERT_YN AS AC1_BALANCE_STATUS_ALERT_YN, AC.PROM_ALERT_YN AS AC1_PROM_ALERT_YN, AC.NIGHT_SMS_ALERT_YN AS AC1_NIGHT_SMS_ALERT_YN, AC.MANUAL_CNR_ADV_YN AS AC1_MANUAL_CNR_ADV_YN,
+				AC.HOPE_ADV_CONFIG_DTIME AS AC1_HOP_ADV_CONFIG_DTIME, AC.HOPE_ADV_CONFIG_YN AS AC1_HOPE_ADV_CONFIG_YN, AC.HOPE_ADV_CONFIG_PROC_YN AS AC1_HOPE_ADV_CONFIG_PROC_YN, AC.AGROUP_LIMIT_CNT AS AC1_AGROUP_LIMIT_CNT,
+				AC.UPDATE_TIME AS AC1_UPDATE_TIME, AC.UPDATE_ID AS AC1_UPDATE_ID, AC.UPDATE_IP AS AC1_UPDATE_IP, AC.UPDATE_INSTANCE AS AC1_UPDATE_INSTANCE, AC.UPDATE_MENU_ID AS AC1_UPDATE_MENU_ID, AC.ITEM_SYNC_YN AS AC1_ITEM_SYNC_YN,
+				AC.FIRST_IMP_DATE AS AC1_FIRST_IMP_DATE, AC.RECENT_IMP_DATE AS AC1_RECENT_IMP_DATE
+		FROM ADV A
+		JOIN ADV_CONFIG AC ON A.ADV_ID = AC.ADV_ID
+	</select>
+
+	<select id="findOneRandom" resultMap="AdvMap">
+		<include refid="select" />
+		ORDER BY rand()
+		LIMIT 0,1
+	</select>
+
+
+</mapper>

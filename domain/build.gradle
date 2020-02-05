@@ -1,0 +1,51 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.epe.demo.adplatform'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.1'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+    implementation 'com.oracle.ojdbc:ojdbc8:19.3.0.0'
+	implementation 'mysql:mysql-connector-java:8.0.18'
+
+	implementation 'org.apache.commons:commons-lang3:3.9'
+	implementation 'org.apache.commons:commons-collections4:4.4'
+	implementation 'com.google.guava:guava:28.2-jre'
+	compile 'joda-time:joda-time:2.10.5'
+	compile 'com.google.code.gson:gson:2.8.6'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+bootJar { enabled = false }
+jar { enabled = true }

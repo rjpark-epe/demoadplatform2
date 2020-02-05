@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ItemRepository">
+
+	<resultMap id='ItemMap' type='com.epe.demo.adplatform.domain.rds.item.ItemVo'>
+		<id property='itemId' column='ITEM_ID' />
+		<result property='advId' column='ADV_ID' />
+		<result property='categoryId' column='CATEGORY_ID' />
+		<result property='itemNo' column='ITEM_NO' />
+		<result property='itemName' column='ITEM_NAME' />
+		<result property='ipkComNo' column='IPK_COM_NO' />
+		<result property='supContractSeq' column='SUP_CONTRACT_SEQ' />
+		<result property='imgUrl' column='IMG_URL' />
+		<result property='mnftName' column='MNFT_NAME' />
+		<result property='itemModelName' column='ITEM_MODEL_NAME' />
+		<result property='brandName' column='BRAND_NAME' />
+		<result property='itemPtxt' column='ITEM_PTXT' />
+		<result property='deliveryCost' column='DELIVERY_COST' />
+		<result property='itemUrl' column='ITEM_URL' />
+		<result property='mobileItemUrl' column='MOBILE_ITEM_URL' />
+		<result property='itemComtCnt' column='ITEM_COMT_CNT' />
+		<result property='adultYn' column='ADULT_YN' />
+		<result property='itemOrgCost' column='ITEM_ORG_COST' />
+		<result property='itemPcCost' column='ITEM_PC_COST' />
+		<result property='itemMobileCost' column='ITEM_MOBILE_COST' />
+		<result property='itemActYn' column='ITEM_ACT_YN' />
+		<result property='updateTime' column='UPDATE_TIME' />
+		<result property='kwdChangeYn' column='KWD_CHANGE_YN' />
+		
+		<result property='dpaStatus' column='DPA_STATUS' />
+	  	<result property='configDiv' column='CONFIG_DIV' />
+	  	<result property='adpItemStatus' column='ADP_ITEM_STATUS' />
+	</resultMap>
+
+	<sql id="select">
+		SELECT I.ITEM_ID, I.ADV_ID, I.CATEGORY_ID, I.ITEM_NO, I.ITEM_NAME, I.IPK_COM_NO, I.SUP_CONTRACT_SEQ, I.IMG_URL, I.MNFT_NAME, I.ITEM_MODEL_NAME, I.BRAND_NAME
+				, I.ITEM_PTXT, I.DELIVERY_COST, I.ITEM_URL, I.MOBILE_ITEM_URL, I.ITEM_COMT_CNT, I.ADULT_YN, I.ITEM_ORG_COST, I.ITEM_PC_COST, I.ITEM_MOBILE_COST
+				, I.ITEM_UPDATE_TIME, I.ITEM_ACT_YN, I.UPDATE_TIME,I.KWD_CHANGE_YN
+		FROM ITEM I  
+	</sql>
+	
+	<insert id="insert" parameterType="com.epe.demo.adplatform.domain.rds.item.ItemVo">
+		INSERT INTO ITEM (ITEM_ID, ADV_ID, CATEGORY_ID, ITEM_NO, ITEM_NAME, IPK_COM_NO, SUP_CONTRACT_SEQ, IMG_URL, MNFT_NAME, ITEM_MODEL_NAME, BRAND_NAME, ITEM_PTXT, DELIVERY_COST, ITEM_URL, MOBILE_ITEM_URL, ITEM_COMT_CNT, ADULT_YN, ITEM_ORG_COST, ITEM_PC_COST, ITEM_MOBILE_COST, ITEM_UPDATE_TIME, ITEM_ACT_YN, UPDATE_TIME,KWD_CHANGE_YN)
+		VALUES (#{itemId},#{advId,jdbcType=VARCHAR},#{categoryId,jdbcType=VARCHAR},#{itemNo,jdbcType=VARCHAR},#{itemName,jdbcType=VARCHAR},#{ipkComNo},#{supContractSeq},#{imgUrl,jdbcType=VARCHAR},#{mnftName,jdbcType=VARCHAR},#{itemModelName,jdbcType=VARCHAR},#{brandName,jdbcType=VARCHAR},#{itemPtxt,jdbcType=VARCHAR},#{deliveryCost,jdbcType=NUMERIC},#{itemUrl,jdbcType=VARCHAR},#{mobileItemUrl,jdbcType=VARCHAR},#{itemComtCnt,jdbcType=NUMERIC},#{adultYn,jdbcType=NUMERIC},#{itemOrgCost,jdbcType=NUMERIC},#{itemPcCost,jdbcType=NUMERIC},#{itemMobileCost,jdbcType=NUMERIC},#{itemUpdateTime,jdbcType=TIMESTAMP},#{itemActYn},#{updateTime},#{kwdChangeYn,jdbcType=NUMERIC})
+	</insert>
+	
+	<insert id="insertEach" parameterType="com.epe.demo.adplatform.domain.rds.item.ItemVo">
+		INSERT INTO ITEM (ITEM_ID, ADV_ID, CATEGORY_ID, ITEM_NO, ITEM_NAME, IPK_COM_NO, SUP_CONTRACT_SEQ, IMG_URL, MNFT_NAME, ITEM_MODEL_NAME, BRAND_NAME, ITEM_PTXT, DELIVERY_COST, ITEM_URL, MOBILE_ITEM_URL, ITEM_COMT_CNT, ADULT_YN, ITEM_ORG_COST, ITEM_PC_COST, ITEM_MOBILE_COST, ITEM_UPDATE_TIME, ITEM_ACT_YN, UPDATE_TIME,KWD_CHANGE_YN)
+		VALUES (#{itemId},#{advId,jdbcType=VARCHAR},#{categoryId,jdbcType=VARCHAR},#{itemNo,jdbcType=VARCHAR},#{itemName,jdbcType=VARCHAR},#{ipkComNo},#{supContractSeq},#{imgUrl,jdbcType=VARCHAR},#{mnftName,jdbcType=VARCHAR},#{itemModelName,jdbcType=VARCHAR},#{brandName,jdbcType=VARCHAR},#{itemPtxt,jdbcType=VARCHAR},#{deliveryCost,jdbcType=NUMERIC},#{itemUrl,jdbcType=VARCHAR},#{mobileItemUrl,jdbcType=VARCHAR},#{itemComtCnt,jdbcType=NUMERIC},#{adultYn,jdbcType=NUMERIC},#{itemOrgCost,jdbcType=NUMERIC},#{itemPcCost,jdbcType=NUMERIC},#{itemMobileCost,jdbcType=NUMERIC},#{itemUpdateTime,jdbcType=TIMESTAMP},#{itemActYn},#{updateTime},#{kwdChangeYn,jdbcType=NUMERIC})
+	</insert>
+	
+	<update id="update" parameterType="com.epe.demo.adplatform.domain.rds.item.ItemVo">
+		UPDATE ITEM 
+		SET ADV_ID = #{advId,jdbcType=VARCHAR}
+			, CATEGORY_ID = #{categoryId,jdbcType=VARCHAR}
+			, ITEM_NO = #{itemNo,jdbcType=VARCHAR}
+			, ITEM_NAME = #{itemName,jdbcType=VARCHAR}
+			, IPK_COM_NO = #{ipkComNo}
+			, SUP_CONTRACT_SEQ = #{supContractSeq}
+			, IMG_URL = #{imgUrl,jdbcType=VARCHAR}
+			, MNFT_NAME = #{mnftName,jdbcType=VARCHAR}
+			, ITEM_MODEL_NAME = #{itemModelName,jdbcType=VARCHAR}
+			, BRAND_NAME = #{brandName,jdbcType=VARCHAR}
+			, ITEM_PTXT = #{itemPtxt,jdbcType=VARCHAR}
+			, DELIVERY_COST = #{deliveryCost,jdbcType=NUMERIC}
+			, ITEM_URL = #{itemUrl,jdbcType=VARCHAR}
+			, MOBILE_ITEM_URL = #{mobileItemUrl,jdbcType=VARCHAR}
+			, ITEM_COMT_CNT = #{itemComtCnt,jdbcType=NUMERIC}
+			, ADULT_YN = #{adultYn,jdbcType=NUMERIC}
+			, ITEM_ORG_COST = #{itemOrgCost,jdbcType=NUMERIC}
+			, ITEM_PC_COST = #{itemPcCost,jdbcType=NUMERIC}
+			, ITEM_MOBILE_COST = #{itemMobileCost,jdbcType=NUMERIC}
+			, ITEM_UPDATE_TIME = #{itemUpdateTime,jdbcType=TIMESTAMP}
+			, ITEM_ACT_YN = #{itemActYn}
+			, UPDATE_TIME = #{updateTime} 
+			, KWD_CHANGE_YN =  #{kwdChangeYn,jdbcType=NUMERIC} 
+		WHERE ITEM_ID = #{itemId}
+	</update>
+		
+	<select id="findAll" resultMap="ItemMap"  fetchSize="1000" resultOrdered="true">
+		<include refid="select"/>
+	</select>
+	
+	<select id="findOne" resultMap="ItemMap">
+		<include refid="select"/>
+		WHERE ITEM_ID = #{itemId}
+	</select>
+
+	<select id="findListByRegistAd" resultMap="ItemMap">
+		<include refid="select"/>
+		JOIN AD A ON I.ITEM_ID = A.ITEM_ID
+	</select>
+	
+</mapper>
